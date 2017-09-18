@@ -1,0 +1,34 @@
+<!-- Criteria Query常用的查询限制方法
+Restrictions.eq() equal，=
+Restrictions.allEq() 参数为Map对象，使用key/value进行多个等于的对比，相当于多个Restrictions.eq()的效果
+Restrictions.gt() greater-than, >
+Restrictions.lt() less-than, <
+Restrictions.le() less-equal, <=
+Restrictions.between() 对应SQL的between子句
+Restrictions.like() 对应SQL的like子句
+Restrictions.in() 对应SQL的in子句
+Restrictions.and() and关系
+Restrictions.or() or关系
+Restrictions.isNull() 判断属性是否为空，为空返回true，否则返回false
+Restrictions.isNotNull() 与Restrictions.isNull()相反
+Order.asc() 根据传入的字段进行升序排序
+Order.desc() 根据传入的字段进行降序排序
+MatchMode.EXACT 字符串精确匹配，相当于“like 'value'”
+MatchMode.ANYWHERE 字符串在中间位置，相当于“like '%value%'”
+MatchMode.START 字符串在最前面的位置，相当于“like 'value%'”
+MatchMode.END 字符串在最后面的位置，相当于“like '%value'”
+分页
+pager=entityservice.findpager(entity.class,*,null,param(paramlist));
+pager=runsqlpage(sql,list);
+执行sql方法
+runsql(sql，list);执行除查询之外的sql，或者无返回值的存储过程
+runcallsql(sql,list);执行存储过程并且只有一个返回值
+查集合
+getalllist();//全部
+条件查询
+runsqllist(sql,list);
+条件查对象
+runsqlquery(sql,list);
+导入excel
+importExcel(File myExcel, String myExcelFileName, String sql);
+ -->

@@ -1,0 +1,162 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 2.3//EN"  "http://struts.apache.org/dtds/struts-2.3.dtd">
+<struts>
+	<!-- struts2委托spring管理 -->
+	<constant name="struts.objectFactory" value="spring" />
+	<!--在struts2.3版本中必须要加上善变那句话开发者模式才会生效 -->
+	<constant name="struts.devMode" value="false" />
+	<!-- 该常量指定包作为根包来搜索Action类。 Convention插件除了扫描默认的action,actions,struts,struts2，还会扫描该常量指定的一个或多个包， 
+		Convention会试图从指定包中发现Action类。 -->
+	<constant name="struts.convention.action.packages" value="com.alien.action" />
+	<!-- 设置Convention插件文件协议类型 -->
+	<constant name="struts.convention.action.fileProtocols" value="jar,wsjar" />
+	<!-- 设置Convention插件是否从jar包中搜索Action类 [可选] 默认值为true -->
+	<constant name="struts.convention.action.disableJarScanning"
+		value="true" />
+	<!--设置Convention插件需要搜索的jar包 -->
+	<constant name="struts.convention.action.includeJars" value=".*/base.*?jar(!/)?" />
+
+
+	<constant name="struts.convention.package.locators" value="example" />
+	<!--在struts2.3版本中必须要加上善变 -->
+	<constant name="struts.configuration.xml.reload" value="true" />
+
+
+	<!--设置成开发模式，如果value为true则说明当修改文件之后立刻生效 -->
+	<constant name="struts.enable.DynamicMethodInvocation" value="true" />
+	<constant name="struts.convention.action.mapallmatches" value="true" />
+
+	<constant name="struts.action.extension" value="action"></constant>
+	<constant name="struts.i18n.reload" value="true"></constant>
+	<constant name="struts.ui.theme" value="simple" />
+	<constant name="struts.url.includeParams" value="none"></constant>
+	<constant name="struts.serve.static" value="true"></constant>
+	<constant name="struts.multipart.parser" value="jakarta"></constant>
+	<constant name="struts.multipart.saveDir" value="/temp"></constant>
+	<constant name="struts.multipart.maxSize" value="31457280"></constant>
+	<constant name="struts.convention.result.path" value="/WEB-INF/pages/" />
+	<constant name="struts.convention.action.name.separator"
+		value="_" />
+
+	<package name="basePackage" extends="struts-default">
+		<!-- struts2验证 拦截器 -->
+		<interceptors>
+			<interceptor-stack name="baseStack">
+				<interceptor-ref name="exception" />
+				<interceptor-ref name="alias" />
+				<interceptor-ref name="servletConfig" />
+				<interceptor-ref name="i18n" />
+				<interceptor-ref name="prepare" />
+				<interceptor-ref name="chain" />
+				<interceptor-ref name="debugging" />
+				<interceptor-ref name="scopedModelDriven" />
+				<interceptor-ref name="modelDriven" />
+				<interceptor-ref name="checkbox" />
+				<interceptor-ref name="multiselect" />
+				<interceptor-ref name="staticParams" />
+				<interceptor-ref name="actionMappingParams" />
+				<interceptor-ref name="params">
+					<param name="excludeParams">dojo\..*,^struts\..*,.*\\u0023.*,.*\\x5Cu0023.*,.*\\x5cu0023.*</param>
+				</interceptor-ref>
+				<interceptor-ref name="conversionError" />
+				<!-- 配置方法级别的校验 -->
+				<interceptor-ref name="validation">
+					<param name="excludeMethods">input,back,cancel,browse</param>
+					<param name="validateAnnotatedMethodOnly">true</param>
+				</interceptor-ref>
+				<interceptor-ref name="workflow">
+					<param name="excludeMethods">input,back,cancel,browse</param>
+				</interceptor-ref>
+			</interceptor-stack>
+		</interceptors>
+
+		<!-- 默认拦截器栈 -->
+		<default-interceptor-ref name="baseStack" />
+		<global-results>
+			<result name="success">/WEB-INF/pages/bm/success.jsp</result>
+		</global-results>
+
+	</package>
+
+	<!-- 定义默认的action 防止出现没有找到方法的异常 -->
+	<package name="defaultPackage" extends="basePackage">
+		<default-action-ref name="noAction" />
+		<action name="noAction">
+			<result>/404.jsp</result>
+		</action>
+	</package>
+	<!-- 后台-action-package -->
+	<package name="bm" extends="basePackage" namespace="/bm">
+		<interceptors>
+			<!-- <interceptor name="logInterceptor" class="com.alien.interceptor.LogInterceptor"/> -->
+			<interceptor-stack name="bmInterceptorStack">
+				<interceptor-ref name="fileUpload">
+					<param name="allowedTypes">image/jpeg,image/pjpeg,image/gif,image/bmp,image/x-ms-bmp,image/png,image/x-png,text/css,text/js,application/excel,application/vnd.ms-excel,application/msword,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet</param>
+					<param name="maximumSize">2097152</param>
+				</interceptor-ref>
+				<interceptor-ref name="baseStack" />
+				<!--<interceptor-ref name="logInterceptor" /> -->
+			</interceptor-stack>
+		</interceptors>
+		<default-interceptor-ref name="bmInterceptorStack" />
+
+		<global-results>
+			<result name="redirect" type="redirectAction">
+				<param name="namespace">/home</param>
+				<param name="actionName">redirect</param>
+				<param name="redirectUrl">${redirectUrl}</param>
+			</result>
+
+		</global-results>
+	</package>
+	<!-- 前台-action-package -->
+	<package name="home" extends="basePackage" namespace="/home">
+		<interceptors>
+			<interceptor name="loginInterceptor"
+				class="com.alien.interceptor.LoginInterceptor"></interceptor>
+			<interceptor-stack name="baseLoginInterceptorStack">
+				<interceptor-ref name="defaultStack" />
+				<interceptor-ref name="loginInterceptor" />
+			</interceptor-stack>
+			<interceptor-stack name="adminLoginInterceptorStack">
+				<interceptor-ref name="fileUpload">
+					<param name="allowedTypes">image/jpeg,image/pjpeg,image/gif,image/bmp,image/x-ms-bmp,image/png,image/x-png,text/css,text/js,application/excel,application/vnd.ms-excel,application/msword,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet</param>
+					<param name="maximumSize">2097152</param>
+				</interceptor-ref>
+				<!-- <interceptor-ref name="adminInterceptor" /> -->
+				<interceptor-ref name="baseStack" />
+			</interceptor-stack>
+		</interceptors>
+		<default-interceptor-ref name="adminLoginInterceptorStack" />    <!-- 这句是设置所有Action自动调用的拦截器堆栈(设置成默认拦截器) -->
+		<global-results>
+			<result name="redirect" type="redirectAction">
+				<param name="namespace">/home</param>
+				<param name="actionName">redirect</param>
+				<param name="redirectUrl">${redirectUrl}</param>
+			</result>
+
+		</global-results>
+		<!-- <global-results> <result name="error" type="freemarker">/WEB-INF/pages/home/error.jsp 
+			</result> <result name="ajaxError" type="freemarker">/WEB-INF/pages/home/ajax_error.jsp 
+			</result> <result name="success" type="freemarker">/WEB-INF/pages/home/success.jsp 
+			</result> </global-results> -->
+
+		<!-- <global-results> -->
+		<!-- 全局result <result name="login">/WEB-INF/pages/home/error.jsp</result> -->
+		<!-- <result name="error">/404.html</result> <result name="authorizationfaild">/WEB-INF/pages/home/403.jsp</result> 
+			</global-results> -->
+		<!-- <global-exception-mappings> <exception-mapping result="error" exception="java.lang.Exception"></exception-mapping> 
+			</global-exception-mappings> -->
+	</package>
+	<!-- 开发微信-action-package -->
+	<package name="chat" extends="basePackage" namespace="/chat">
+	</package>
+	<!-- 支付action-package -->
+	<package name="pay" extends="basePackage" namespace="/pay">
+	</package>
+	<!--导入struts-default.xml文件 -->
+	<include file="struts-default.xml"></include>
+	<!-- <include file="struts-*.xml"></include> -->
+
+</struts>
+

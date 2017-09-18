@@ -1,0 +1,271 @@
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://www.springframework.org/schema/beans" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:util="http://www.springframework.org/schema/util" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:tx="http://www.springframework.org/schema/tx" xmlns:cache="http://www.springframework.org/schema/cache"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+       http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+       http://www.springframework.org/schema/aop
+       http://www.springframework.org/schema/aop/spring-aop-4.0.xsd
+       	http://www.springframework.org/schema/util
+		http://www.springframework.org/schema/util/spring-util-4.0.xsd
+       http://www.springframework.org/schema/context
+       http://www.springframework.org/schema/context/spring-context-4.0.xsd
+       http://www.springframework.org/schema/tx
+       http://www.springframework.org/schema/tx/spring-tx-4.0.xsd
+       http://www.springframework.org/schema/cache 
+       http://www.springframework.org/schema/cache/spring-cache-4.0.xsd">
+	<aop:config />
+	<context:component-scan base-package="com.alien" />
+	<context:property-placeholder location="classpath*:/database.properties" />
+
+
+	<bean id="idataSource" class="com.alibaba.druid.pool.DruidDataSource"
+
+		init-method="init" destroy-method="close">
+
+		<!-- 基本属性 url、user、password -->
+
+		<property name="driverClassName" value="${ijdbc.driver}"></property>
+
+		<property name="url" value="${ijdbc.url}"></property>
+
+		<property name="username" value="${ijdbc.username}"></property>
+
+		<property name="password" value="${ijdbc.password}"></property>
+
+
+		<!-- 配置初始化大小、最小、最大 -->
+		<property name="initialSize" value="${initialSize}" />
+		<!-- 最大空闲连接数 -->
+		<property name="minIdle" value="${minIdle}" />
+		<!-- 最大并发连接数 -->
+		<property name="maxActive" value="${maxActive}" />
+		<!-- 配置获取连接等待超时的时间 -->
+		<property name="maxWait" value="${maxWait}" />
+		<!-- 超过时间限制是否回收 -->
+		<property name="removeAbandoned" value="${removeAbandoned}" />
+		<!-- 超过时间限制多长 -->
+		<property name="removeAbandonedTimeout" value="${removeAbandonedTimeout}" />
+		<!-- 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒 -->
+
+		<property name="timeBetweenEvictionRunsMillis" value="${timeBetweenEvictionRunsMillis}" />
+
+		<!-- 配置一个连接在池中最小生存的时间，单位是毫秒 -->
+
+		<property name="minEvictableIdleTimeMillis" value="${minEvictableIdleTimeMillis}" />
+		<!-- 用来检测连接是否有效的sql，要求是一个查询语句 -->
+		<property name="validationQuery" value="${validationQuery}" />
+		<!-- 申请连接的时候检测 -->
+		<property name="testWhileIdle" value="${testWhileIdle}" />
+		<!-- 申请连接时执行validationQuery检测连接是否有效，配置为true会降低性能 -->
+		<property name="testOnBorrow" value="${testOnBorrow}" />
+		<!-- 归还连接时执行validationQuery检测连接是否有效，配置为true会降低性能 -->
+		<property name="testOnReturn" value="${testOnReturn}" />
+		<!-- 自动提交 -->
+		<property name="defaultAutoCommit" value="${defaultAutoCommit}" />
+		<!-- 只读设置 -->
+		<property name="defaultReadOnly" value="${defaultReadOnly}" />
+
+		<!-- 打开PSCache，并且指定每个连接上PSCache的大小 -->
+
+		<property name="poolPreparedStatements" value="${poolPreparedStatements}" />
+
+		<property name="maxPoolPreparedStatementPerConnectionSize"
+
+			value="${maxPoolPreparedStatementPerConnectionSize}" />
+
+		<!--属性类型是字符串，通过别名的方式配置扩展插件，常用的插件有： 监控统计用的filter:stat 日志用的filter:log4j 防御SQL注入的filter:wall -->
+
+		<property name="filters" value="${filters}" />
+	</bean>
+
+	<bean id="udataSource" class="com.alibaba.druid.pool.DruidDataSource"
+
+		init-method="init" destroy-method="close">
+
+		<!-- 基本属性 url、user、password -->
+
+		<property name="driverClassName" value="${ujdbc.driver}"></property>
+
+		<property name="url" value="${ujdbc.url}"></property>
+
+		<property name="username" value="${ujdbc.username}"></property>
+
+		<property name="password" value="${ujdbc.password}"></property>
+
+
+		<!-- 配置初始化大小、最小、最大 -->
+		<property name="initialSize" value="${initialSize}" />
+		<!-- 最大空闲连接数 -->
+		<property name="minIdle" value="${minIdle}" />
+		<!-- 最大并发连接数 -->
+		<property name="maxActive" value="${maxActive}" />
+		<!-- 配置获取连接等待超时的时间 -->
+		<property name="maxWait" value="${maxWait}" />
+		<!-- 超过时间限制是否回收 -->
+		<property name="removeAbandoned" value="${removeAbandoned}" />
+		<!-- 超过时间限制多长 -->
+		<property name="removeAbandonedTimeout" value="${removeAbandonedTimeout}" />
+		<!-- 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒 -->
+
+		<property name="timeBetweenEvictionRunsMillis" value="${timeBetweenEvictionRunsMillis}" />
+
+		<!-- 配置一个连接在池中最小生存的时间，单位是毫秒 -->
+
+		<property name="minEvictableIdleTimeMillis" value="${minEvictableIdleTimeMillis}" />
+		<!-- 用来检测连接是否有效的sql，要求是一个查询语句 -->
+		<property name="validationQuery" value="${validationQuery}" />
+		<!-- 申请连接的时候检测 -->
+		<property name="testWhileIdle" value="${testWhileIdle}" />
+		<!-- 申请连接时执行validationQuery检测连接是否有效，配置为true会降低性能 -->
+		<property name="testOnBorrow" value="${testOnBorrow}" />
+		<!-- 归还连接时执行validationQuery检测连接是否有效，配置为true会降低性能 -->
+		<property name="testOnReturn" value="${testOnReturn}" />
+		<!-- 自动提交 -->
+		<property name="defaultAutoCommit" value="${defaultAutoCommit}" />
+		<!-- 只读设置 -->
+		<property name="defaultReadOnly" value="${defaultReadOnly}" />
+
+		<!-- 打开PSCache，并且指定每个连接上PSCache的大小 -->
+
+		<property name="poolPreparedStatements" value="${poolPreparedStatements}" />
+
+		<property name="maxPoolPreparedStatementPerConnectionSize"
+
+			value="${maxPoolPreparedStatementPerConnectionSize}" />
+
+		<!--属性类型是字符串，通过别名的方式配置扩展插件，常用的插件有： 监控统计用的filter:stat 日志用的filter:log4j 防御SQL注入的filter:wall -->
+
+		<property name="filters" value="${filters}" />
+	</bean>
+
+	<!-- 编写spring 配置文件的配置多数源映射关系 -->
+	<bean id="dataSource" class="com.alien.common.DynamicDataSource">
+		<property name="targetDataSources">
+			<map key-type="java.lang.String">
+				<entry key="CCVZB" value-ref="idataSource"></entry>
+				<entry key="CCSC" value-ref="udataSource"></entry>
+			</map>
+		</property>
+		<property name="defaultTargetDataSource" ref="idataSource"></property>
+	</bean>
+	<!-- 创建表组策略 -->
+	<bean id="databaseNamingStrategy" class="com.alien.common.DatabaseNamingStrategy">
+		<property name="tablePrefix" value="${namingStrategy.tablePrefix}" />
+		<property name="isAddUnderscores" value="${namingStrategy.isAddUnderscores}" />
+		<property name="maxLength" value="${namingStrategy.maxLength}" />
+	</bean>
+
+
+
+	<!-- 配置SessionFactory -->
+
+	<bean id="sessionFactory"
+		class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+
+		<property name="dataSource" ref="dataSource" />
+
+		<property name="entityInterceptor" ref="entityInterceptor" />
+
+		<property name="namingStrategy" ref="databaseNamingStrategy" />
+
+		<property name="hibernateProperties">
+
+			<props>
+				<!--设置外连接抓取树的最大深度 -->
+				<prop key="hibernate.max_fetch_depth">${hibernate.max_fetch_depth}</prop>
+
+				<prop key="hibernate.jdbc.fetch_size">${hibernate.jdbc.fetch_size}</prop>
+
+				<prop key="hibernate.jdbc.batch_size">${hibernate.jdbc.batch_size}</prop>
+
+				<prop key="hibernate.dialect">${hibernate.dialect}</prop>
+
+				<prop key="hibernate.hbm2ddl.auto">${hibernate.hbm2ddl.auto}</prop> <!--自动更新表结构 -->
+
+				<prop key="hibernate.show_sql">${hibernate.show_sql}</prop>
+
+				<prop key="hibernate.format_sql">${hibernate.format_sql}</prop>
+
+				<!-- 关闭二级缓存 -->
+				<prop key="hibernate.cache.provider_class">${hibernate.cache.provider_class}</prop>
+				<!-- 关闭实体字段映射校验 -->
+				<prop key="javax.persistence.validation.mode">${javax.persistence.validation.mode}</prop>
+
+				<prop key="hibernate.current_session_context_class">org.springframework.orm.hibernate4.SpringSessionContext
+				</prop>
+				<!-- 缓存设置 -->
+				<prop key="hibernate.cache.region.factory_class">org.hibernate.cache.ehcache.EhCacheRegionFactory
+				</prop>
+				<!-- 二级缓存配置文件的位置 -->
+				<!-- <prop key="hibernate.net.sf.ehcache.configurationResourceName">/ehcache.xml</prop> -->
+				<prop key="hibernate.cache.use_second_level_cache">true</prop>
+				<prop key="hibernate.cache.use_query_cache">true</prop>
+				<!-- 结果集滚动 -->
+				<prop key="jdbc.use_scrollable_resultset">false</prop>
+			</props>
+
+		</property>
+
+		<property name="packagesToScan" value="com.alien.entity" />
+
+	</bean>
+
+	<bean id="springUtil" class="com.alien.util.SpringUtil" lazy-init="false" />
+	<!-- ehcache 的配置 -->
+	<bean id="cacheManager"
+		class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean">
+		<property name="configLocation">
+			<value>classpath:ehcache.xml</value>
+		</property>
+	</bean>
+
+	<!-- 配置一个事务管理器 -->
+
+	<bean id="transactionManager"
+		class="org.springframework.orm.hibernate4.HibernateTransactionManager">
+
+		<property name="sessionFactory" ref="sessionFactory" />
+
+	</bean>
+
+	<bean
+		class="org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor" />
+
+
+	<!-- 使用annotation定义事务 -->
+
+	<tx:annotation-driven transaction-manager="transactionManager"
+
+		proxy-target-class="true" />
+	<bean id="transactionProxyFactory" abstract="true"
+		class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+		<property name="transactionManager" ref="transactionManager"></property>
+		<property name="transactionAttributes">
+			<props>
+				<prop key="save*">PROPAGATION_REQUIRED</prop>
+				<prop key="edit*">PROPAGATION_REQUIRED</prop>
+				<prop key="delate*">PROPAGATION_REQUIRED</prop>
+			</props>
+		</property>
+	</bean>
+
+	<!-- 配置druid监控spring jdbc -->
+	<bean id="druid-stat-interceptor"
+		class="com.alibaba.druid.support.spring.stat.DruidStatInterceptor">
+	</bean>
+	<bean id="druid-stat-pointcut" class="org.springframework.aop.support.JdkRegexpMethodPointcut"
+		scope="prototype">
+		<property name="patterns">
+			<list>
+				<value>com.alien.service.*</value>
+			</list>
+		</property>
+	</bean>
+	<aop:config>
+		<aop:advisor advice-ref="druid-stat-interceptor"
+			pointcut-ref="druid-stat-pointcut" />
+	</aop:config>
+
+</beans>
